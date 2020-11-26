@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { addToCart, removeFromCart } from '../actions/cartActions';
+import { CART_EMPTY } from '../constants/cartConstants';
 import MessageBox from '../components/MessageBox';
 import './CartScreen.css'
 
@@ -31,10 +32,14 @@ export default function CartScreen(props) {
   const checkoutHandler = () => {
     props.history.push('/shipping');
   };
+
+  const clearCart = () => {
+    dispatch({ type: CART_EMPTY });
+  }
   return (
     <div className="row top">
       <div className="col-2">
-        <h1>Shopping Cart</h1>
+        <h1>Shopping Cart</h1><button className="btn btn-primary" onClick={clearCart}>Clear Cart</button>
         {cartItems.length === 0 ? (
           <MessageBox>
             Cart is empty. <Link to="/">Go Shopping</Link>

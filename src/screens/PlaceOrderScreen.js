@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react';
-import Axios from 'axios';
+import React from 'react';
 import { PayPalButton } from 'react-paypal-button-v2';
 import StripeCheckout from "react-stripe-checkout";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { createOrder, detailsOrder } from '../actions/orderActions';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 import { CART_EMPTY } from '../constants/cartConstants';
-import LoadingBox from '../components/LoadingBox';
 import './CartScreen.css';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,8 +21,6 @@ export default function PlaceOrderScreen(props) {
     props.history.push('/payment');
   }
 
-  const orderCreate = useSelector((state) => state.orderCreate);
-  const { loading, success, error, order } = orderCreate;
   const toPrice = (num) => Number(num.toFixed(2)); // 5.123 => "5.12" => 5.12
   cart.itemsPrice = toPrice(
     cart.cartItems.reduce((a, c) => a + c.qty * c.price, 0)
@@ -35,13 +30,14 @@ export default function PlaceOrderScreen(props) {
   cart.taxPrice = toPrice(0.15 * cart.itemsPrice);
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
   const dispatch = useDispatch();
-  const placeOrderHandler = () => {
-    dispatch(detailsOrder({ ...cart, orderItems: cart.cartItems }));
-  };
 
   const successPaymentHandler = (details, data) => {
+    dispatch({ type: CART_EMPTY });
+    toast("Success! Paypal payment successful", { type: "success" });
+    history.push("/")
+
+
     console.log("Pay with PayPal:::::::::::::", details, data)
-    dispatch(detailsOrder({ ...cart, orderItems: details }));
 
     // toast("Success! Check email for details", { type: "success" });
   };
@@ -56,13 +52,6 @@ export default function PlaceOrderScreen(props) {
     // Note: Stripe does not send receipt on Test Mode Sandbox
   }  
 
-  useEffect(() => {
-    if (success) {
-      props.history.push(`/order/`);
-      dispatch({ type: ORDER_CREATE_RESET });
-    }
-  }, [dispatch, order, props.history, success]);
-  
   return (
     <div>
       <CheckoutSteps step1 step2 step3></CheckoutSteps>
@@ -173,8 +162,6 @@ export default function PlaceOrderScreen(props) {
                   />
                 )
               }
-              
-              {loading && <LoadingBox></LoadingBox>}
             </ul>
           </div>
         </div>
