@@ -1,0 +1,29 @@
+
+a.title {
+  max-width: 100px !important;
+  color: brown;
+}
+
+.titlee {
+  max-width: 300px !important;
+  margin-right: 0px;
+}
+
+.qty{
+  background-color: #999;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.add, .minus {
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  background-color: brown;
+  color: aliceblue;
+}
+
+.card {
+  height: auto !important;
+}
