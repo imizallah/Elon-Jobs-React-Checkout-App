@@ -39,7 +39,7 @@ function App() {
         
           <Route path="/" component={HomeScreen} exact></Route>
         </main>
-        <footer className="row center">All right reserved | Elon Jobs November 2020 </footer>
+        <footer className="row center">All right reserved | Elon Jobs November 2020. </footer>
       </div>
     </BrowserRouter>
   );
